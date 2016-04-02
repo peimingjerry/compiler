@@ -2,10 +2,10 @@
 This was a first version:
 1. create RDB and DDB. 
 	1> RDB is the raw database from input, it reflect the basic syntax tree after parsing with Lex/Yacc.
-	2> DDB is the define database, based on the RDB. The main value is to create the definiton of classes and functions(either global or member), 
-	and then bind the variables and function calls to their masters.
-	3> TODO: we will add extended database (EDB) after that. It will extend (instantializ) all the instances (variable) and allocate spaces for them, 
-	instead of the shared master structure in DDB. In this stage, all the descriptive instructions (pseudocode) of this program are printed.
+	2> DDB is the define database, based on the RDB. 
+	The main value is to create the definiton of classes and functions(either global or member), and then bind the variables and function calls to their masters.
+	3> TODO: we will add extended database (EDB) after that. 
+	It will extend (instantializ) all the instances (variable) and allocate spaces for them, instead of the shared master structure in DDB. In this stage, all the descriptive instructions (pseudocode) of this program are printed.
   
 2. Supported feature:
 	1> Global functions/variables definition, with main function as the begining of program.
