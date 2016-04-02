@@ -95,10 +95,17 @@ class ddbFuncCall:
 #######################
 class ddbAsignExpr:
     def __init__(self):
+        self.rdbObj = None
         self.paramL = None
         self.paramR = None
         self.parent = None
 
+    def setRdbObj(self, rdbObj):
+        self.rdbObj = rdbObj
+
+    def getRdbObj(self):
+        return self.rdbObj
+    
     def setParamL(self, paramL):
         self.paramL = paramL
         
@@ -115,11 +122,17 @@ class ddbAsignExpr:
         self.parent = parent
 
     def getParent(self):
-        return parent
+        return self.parent
 
     def dump(self, level):
         offset = getDumpOffset(level)
-        print offset + 'excute: %s = %s' % (self.paramL.getRefVar(), self.paramR.valueToStr())
+        lstr = self.paramL.getName()
+        rstr = ''
+        if isinstance(self.paramR, ddbVar):
+            rstr = self.paramR.getName()
+        else:
+            rstr = str(self.paramR)
+        print offset + 'excute: %s = %s' % (lstr, rstr)
 
 #######################
 class ddbVar:
@@ -333,13 +346,9 @@ class ddbContext:
         for i in rdbObj.getInstructions():
             if isinstance(i, rdbFuncCall):
                 inst = ddbFuncCall()
-                inst.setRdbObj(i)
             elif isinstance(i, rdbAsignExpr):
-                paramL = ddbParam(i.getParamL())
-                paramR = ddbParam(i.getParamR())
                 inst = ddbAsignExpr()
-                inst.setParamL(paramL)
-                inst.setParamR(paramR)
+            inst.setRdbObj(i)
             inst.setParent(self)
             self.addInstruction(inst)
             
@@ -412,8 +421,25 @@ class ddbContext:
                         foundFunc.elaborate()
                         foundFunc.setElaborated(True)
             else:
-                #TODO: to add assign expr handling
-                pass
+                # assign expr handling
+                rdb_expr = inst.getRdbObj()
+                parent = inst.getParent()
+                paramL = rdb_expr.getParamL()
+                paramR = rdb_expr.getParamR()
+                assert paramL.isRefValue()             
+                foundVar = parent.findVar(paramL.getRefVar())
+                if foundVar != None:
+                    inst.setParamL(foundVar)
+                else:
+                    print 'cannot find L value of expr %s' % paramL.getRefVar()
+                if paramR.isRefValue():
+                    foundVar = parent.findVar(paramR.getRefVar())
+                    if foundVar != None:
+                        inst.setParamR(foundVar)
+                    else:
+                        print 'cannot find R value of expr %s' % paramR.getRefVar()
+                else:
+                    inst.setParamR(paramR.getValue())
                     
     def dump(self, level):
         offset = getDumpOffset(level-1)
