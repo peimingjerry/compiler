@@ -2,3 +2,21 @@
 This project will create a compiler front-end tool.
 The compiler could parse the C++ OOP language.
 The input is a C++ source file and the output is a descriptive script that could be translated into intermediet code easily.
+
+This was a first version:
+1. create RDB and DDB. 
+  1> RDB is the raw database from input, it reflect the basic syntax tree after parsing with Lex/Yacc.
+  2> DDB is the define database, based on the RDB. The main value is to create the definiton of classes and functions(either global or member), 
+  and then bind the variables and function calls to their masters.
+  3> TODO: we will add extended database (EDB) after that. It will extend (instantializ) all the instances (variable) and allocate spaces for them, 
+  instead of the shared master structure in DDB. In this stage, all the descriptive instructions (pseudocode) of this program are printed.
+  
+2. Supported feature:
+  1> Global functions/variables definition, with main function as the begining of program.
+  2> Two kinds of instructions: function calls and assignment instructions.
+  3> Class definitions, member variable/function definition. Call of member functions of a class from object.
+  
+3. What to do next:
+  1> Support base/derive classes, private/public protection, dynamic binding.
+  2> EDB database creation and instruction (pseudocode) generation.
+  2> Support x1.x2.func() and x1.x2.variable. For now, we only permit one level hierachical, Such as x1.func().

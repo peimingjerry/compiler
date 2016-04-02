@@ -1,0 +1,67 @@
+----------------------
+DDB:
+{
+classDefns:
+    BuiltIn type: int
+    BuiltIn type: char
+    class:
+    MyClassB
+    {
+        vars:
+            name = _i_B   master =  int
+            name = _j_B   master =  char
+            name = _A   master =  MyClassA
+    }
+    class:
+    MyClassA
+    {
+        vars:
+            name = _i_A   master =  int
+            name = _j_A   master =  char
+    }
+funcDefns:
+    function: int func1 (int i,int j)
+    func1
+    {
+        vars:
+            name = _i   master =  int
+            name = _j   master =  int
+        instructions:
+            excute: _i = i
+            excute: _j = j
+    }
+    function: int main ()
+    main
+    {
+        vars:
+            name = _i   master =  int
+            name = _j   master =  int
+            name = _B1   master =  MyClassB
+            name = _B2   master =  MyClassB
+        instructions:
+            excute: _i = 1
+            excute: _j = 2
+            calling function: func1(_i, _j)
+            calling function: func1(3, 4)
+            calling function: MyClassB_memfunc_B(this= _B1)
+            calling function: MyClassB_memfunc_B(this= _B2)
+    }
+    function: void MyClassB_memfunc_B (MyClassB this)
+    MyClassB_memfunc_B
+    {
+        instructions:
+            excute: _i_B = 0
+            excute: _j_B = 1
+            calling function: MyClassA_memfunc_A(this= _A, _i_B, _j_B)
+    }
+    function: void MyClassA_memfunc_A (MyClassA this,int i,int j)
+    MyClassA_memfunc_A
+    {
+        instructions:
+            excute: _i_A = i
+            excute: _j_A = j
+    }
+instructions:
+    calling function: main()
+}
+----------------------

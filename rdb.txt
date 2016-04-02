@@ -1,0 +1,71 @@
+RDB:
+{
+classDefns:
+    class:
+    MyClassB
+    {
+        funcDefns:
+            function: void memfunc_B ()
+            memfunc_B
+            {
+                instructions:
+                    excute: _i_B = 0
+                    excute: _j_B = 1
+                    calling function: _A.memfunc_A(_i_B,_j_B)
+            }
+
+        vars:
+            name=_i_B type=int
+            name=_j_B type=char
+            name=_A type=MyClassA
+    }
+
+    class:
+    MyClassA
+    {
+        funcDefns:
+            function: void memfunc_A (int i,int j)
+            memfunc_A
+            {
+                instructions:
+                    excute: _i_A = i
+                    excute: _j_A = j
+            }
+
+        vars:
+            name=_i_A type=int
+            name=_j_A type=char
+    }
+
+funcDefns:
+    function: int func1 (int i,int j)
+    func1
+    {
+        vars:
+            name=_i type=int
+            name=_j type=int
+        instructions:
+            excute: _i = i
+            excute: _j = j
+    }
+
+    function: int main ()
+    main
+    {
+        vars:
+            name=_i type=int
+            name=_j type=int
+            name=_B1 type=MyClassB
+            name=_B2 type=MyClassB
+        instructions:
+            excute: _i = 1
+            excute: _j = 2
+            calling function: func1(_i,_j)
+            calling function: func1(3,4)
+            calling function: _B1.memfunc_B()
+            calling function: _B2.memfunc_B()
+    }
+
+}
+
+----------------------
