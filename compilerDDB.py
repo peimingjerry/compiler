@@ -288,11 +288,11 @@ class ddbContext:
         return self.isElab
     
     def elaborate(self):
-        self.populateMasters()
-        self.populateInstances()
+        self.defineMasters()
+        self.createInstances()
         self.bindInstances()
     
-    def populateMasters(self):
+    def defineMasters(self):
         rdbObj = self.rdbObj
         if rdbObj == None:
             print self
@@ -335,7 +335,7 @@ class ddbContext:
             classDefn.setParent(self)
             self.addClassDefn(classDefn)
 
-    def populateInstances(self):
+    def createInstances(self):
         rdbObj = self.rdbObj
         assert rdbObj != None
         for i in rdbObj.getVars():
@@ -575,17 +575,17 @@ class ddbProgram(ddbContext):
         ddbContext.__init__(self)
         ddbContext.setRdbObj(self, rdbObj)
 
-    def populateMasters(self):
-        self.populateBuiltInTypes()
-        ddbContext.populateMasters(self)
+    def defineMasters(self):
+        self.registerBuiltInMasters()
+        ddbContext.defineMasters(self)
 
-    def populateBuiltInTypes(self):
+    def registerBuiltInMasters(self):
         self.classDefns.append(Integer())
         self.classDefns.append(Char())
         
     def elaborate(self):
-        self.populateMasters()
-        self.populateInstances()
+        self.defineMasters()
+        self.createInstances()
         self.bindInstances()
         mainFuncDefn = self.findMainFuncDefn()
         if mainFuncDefn != None:
